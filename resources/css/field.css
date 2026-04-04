@@ -1,0 +1,316 @@
+/* Nova Field CSS */
+
+/* Tiptap placeholder */
+.tiptap p.is-editor-empty:first-child::before {
+  color: #adb5bd;
+  content: attr(data-placeholder);
+  float: left;
+  height: 0;
+  pointer-events: none;
+}
+
+/* Editor focus ring */
+.nova-tiptap-content .tiptap:focus {
+  outline: none;
+}
+
+/* ─── Editor Content Styles ───────────────────────────────────────────── */
+/* Mirror wysiwyg.css styles so the editor matches the detail/frontend view */
+
+.nova-tiptap-content .tiptap {
+  line-height: 1.6;
+  color: #1f2937;
+}
+
+.nova-tiptap-content .tiptap h1,
+.nova-tiptap-content .tiptap h2,
+.nova-tiptap-content .tiptap h3,
+.nova-tiptap-content .tiptap h4,
+.nova-tiptap-content .tiptap h5,
+.nova-tiptap-content .tiptap h6 {
+  line-height: 1.3;
+  font-weight: 700;
+  margin: 1em 0 0.5em;
+  color: #111827;
+}
+
+.nova-tiptap-content .tiptap h1 { font-size: 2em; }
+.nova-tiptap-content .tiptap h2 { font-size: 1.5em; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.25em; }
+.nova-tiptap-content .tiptap h3 { font-size: 1.25em; }
+.nova-tiptap-content .tiptap h4 { font-size: 1.1em; }
+.nova-tiptap-content .tiptap h5 { font-size: 1em; }
+.nova-tiptap-content .tiptap h6 { font-size: 0.9em; color: #6b7280; }
+
+.nova-tiptap-content .tiptap p {
+  margin: 0.75em 0;
+}
+
+.nova-tiptap-content .tiptap a {
+  color: #2563eb;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.nova-tiptap-content .tiptap ul,
+.nova-tiptap-content .tiptap ol {
+  margin: 0.75em 0;
+  padding-left: 1.5em;
+}
+
+.nova-tiptap-content .tiptap ul { list-style-type: disc; }
+.nova-tiptap-content .tiptap ol { list-style-type: decimal; }
+
+.nova-tiptap-content .tiptap li {
+  margin: 0.25em 0;
+}
+
+.nova-tiptap-content .tiptap blockquote {
+  border-left: 4px solid #6366f1;
+  background: #eef2ff;
+  margin: 1em 0;
+  padding: 0.75em 1em;
+  color: #3730a3;
+  border-radius: 0 6px 6px 0;
+}
+
+.nova-tiptap-content .tiptap blockquote p {
+  margin: 0.25em 0;
+}
+
+.nova-tiptap-content .tiptap code {
+  background: #f3f4f6;
+  border: 1px solid #e5e7eb;
+  border-radius: 3px;
+  padding: 0.15em 0.35em;
+  font-size: 0.9em;
+  font-family: 'SF Mono', SFMono-Regular, Consolas, 'Liberation Mono', Menlo, monospace;
+  color: #dc2626;
+}
+
+.nova-tiptap-content .tiptap hr {
+  border: none;
+  border-top: 2px solid #e5e7eb;
+  margin: 1.5em 0;
+}
+
+.nova-tiptap-content .tiptap mark {
+  background: #fef08a;
+  border-radius: 2px;
+  padding: 0.05em 0.15em;
+}
+
+/* ─── Tables ──────────────────────────────────────────────────────────── */
+
+.nova-tiptap-content .tiptap table {
+  border-collapse: collapse;
+  width: 100%;
+  margin: 1em 0;
+}
+
+.nova-tiptap-content .tiptap table td,
+.nova-tiptap-content .tiptap table th {
+  border: 1px solid #d1d5db;
+  padding: 0.5em 0.75em;
+  min-width: 80px;
+  vertical-align: top;
+  position: relative;
+}
+
+.nova-tiptap-content .tiptap table th {
+  background-color: #f3f4f6;
+  font-weight: 600;
+  text-align: left;
+}
+
+.dark .nova-tiptap-content .tiptap table td,
+.dark .nova-tiptap-content .tiptap table th {
+  border-color: #4b5563;
+}
+
+.dark .nova-tiptap-content .tiptap table th {
+  background-color: #374151;
+}
+
+/* Selected cell highlight */
+.nova-tiptap-content .tiptap table .selectedCell {
+  background-color: #dbeafe;
+}
+
+.dark .nova-tiptap-content .tiptap table .selectedCell {
+  background-color: #1e3a5f;
+}
+
+/* Column resize handle */
+.nova-tiptap-content .tiptap .column-resize-handle {
+  position: absolute;
+  right: -2px;
+  top: 0;
+  bottom: 0;
+  width: 4px;
+  background-color: #3b82f6;
+  pointer-events: none;
+}
+
+.nova-tiptap-content .tiptap.resize-cursor {
+  cursor: col-resize;
+}
+
+/* ─── Images ──────────────────────────────────────────────────────────── */
+
+.nova-tiptap-content .tiptap img {
+  max-width: 100%;
+  height: auto;
+  border-radius: 6px;
+}
+
+.nova-tiptap-content .tiptap .image-resizer {
+  display: inline-flex;
+  position: relative;
+}
+
+.nova-tiptap-content .tiptap .image-resizer .resize-trigger {
+  position: absolute;
+  right: -6px;
+  bottom: -6px;
+  width: 12px;
+  height: 12px;
+  background: #3b82f6;
+  border: 2px solid white;
+  border-radius: 2px;
+  cursor: nwse-resize;
+}
+
+/* ─── Snippet: Callout Box ────────────────────────────────────────────── */
+
+.nova-tiptap-content .tiptap .wysiwyg-callout {
+  background: #fefce8;
+  border-left: 4px solid #f59e0b;
+  padding: 12px 16px;
+  margin: 12px 0;
+  border-radius: 0 6px 6px 0;
+  line-height: 1.5;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
+}
+
+.nova-tiptap-content .tiptap .wysiwyg-callout strong:first-child {
+  color: #92400e;
+}
+
+/* ─── Snippet: Info Card ──────────────────────────────────────────────── */
+
+.nova-tiptap-content .tiptap .wysiwyg-info-card {
+  background: #eff6ff;
+  border: 1px solid #bfdbfe;
+  border-radius: 8px;
+  padding: 16px;
+  margin: 12px 0;
+}
+
+.nova-tiptap-content .tiptap .wysiwyg-info-card h3 {
+  margin: 0 0 6px 0;
+  font-size: 1.1em;
+  color: #1e40af;
+  border: none;
+  padding: 0;
+}
+
+.nova-tiptap-content .tiptap .wysiwyg-info-card p {
+  margin: 0;
+  color: #1e3a5f;
+}
+
+/* ─── Snippet: Two Column ─────────────────────────────────────────────── */
+
+.nova-tiptap-content .tiptap .wysiwyg-two-col {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin: 12px 0;
+}
+
+.nova-tiptap-content .tiptap .wysiwyg-two-col > div {
+  background: #f9fafb;
+  border: 1px solid #e5e7eb;
+  border-radius: 6px;
+  padding: 12px 16px;
+}
+
+.nova-tiptap-content .tiptap .wysiwyg-two-col h4 {
+  margin: 0 0 4px 0;
+  font-size: 1em;
+  color: #374151;
+}
+
+.nova-tiptap-content .tiptap .wysiwyg-two-col p {
+  margin: 0;
+  color: #6b7280;
+}
+
+/* ─── Dark Mode Overrides ─────────────────────────────────────────────── */
+
+.dark .nova-tiptap-content .tiptap {
+  color: #e5e7eb;
+}
+
+.dark .nova-tiptap-content .tiptap h1,
+.dark .nova-tiptap-content .tiptap h2,
+.dark .nova-tiptap-content .tiptap h3,
+.dark .nova-tiptap-content .tiptap h4,
+.dark .nova-tiptap-content .tiptap h5 {
+  color: #f3f4f6;
+}
+
+.dark .nova-tiptap-content .tiptap h2 {
+  border-bottom-color: #4b5563;
+}
+
+.dark .nova-tiptap-content .tiptap blockquote {
+  background: #1e1b4b;
+  color: #a5b4fc;
+  border-left-color: #818cf8;
+}
+
+.dark .nova-tiptap-content .tiptap code {
+  background: #374151;
+  border-color: #4b5563;
+  color: #f87171;
+}
+
+.dark .nova-tiptap-content .tiptap hr {
+  border-top-color: #4b5563;
+}
+
+.dark .nova-tiptap-content .tiptap .wysiwyg-callout {
+  background: #451a03;
+  border-left-color: #d97706;
+}
+
+.dark .nova-tiptap-content .tiptap .wysiwyg-callout strong:first-child {
+  color: #fbbf24;
+}
+
+.dark .nova-tiptap-content .tiptap .wysiwyg-info-card {
+  background: #1e3a5f;
+  border-color: #2563eb;
+}
+
+.dark .nova-tiptap-content .tiptap .wysiwyg-info-card h3 {
+  color: #93c5fd;
+}
+
+.dark .nova-tiptap-content .tiptap .wysiwyg-info-card p {
+  color: #bfdbfe;
+}
+
+.dark .nova-tiptap-content .tiptap .wysiwyg-two-col > div {
+  background: #1f2937;
+  border-color: #4b5563;
+}
+
+.dark .nova-tiptap-content .tiptap .wysiwyg-two-col h4 {
+  color: #e5e7eb;
+}
+
+.dark .nova-tiptap-content .tiptap .wysiwyg-two-col p {
+  color: #9ca3af;
+}
