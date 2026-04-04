@@ -178,7 +178,24 @@
             </div>
           </template>
 
-          <span v-if="buttons.includes('link') || buttons.includes('image') || snippets.length > 0" class="border-l border-gray-300 dark:border-gray-600 mx-0.5 h-5"></span>
+          <!-- Float controls -->
+          <template v-if="buttons.includes('float')">
+            <span class="border-l border-gray-300 dark:border-gray-600 mx-0.5 h-5"></span>
+            <button type="button" class="nova-tiptap-btn" :class="btnClass(editor.isActive('image', { dataFloat: 'left' }) || editor.isActive('snippetBlock', { dataFloat: 'left' }))" @click="editor.chain().focus().setFloatLeft().run()" title="Float Left">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><rect x="3" y="4" width="8" height="7" rx="1" /><path d="M14 5.5h7M14 8.5h7M3 14.5h18M3 17.5h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none" /></svg>
+            </button>
+            <button type="button" class="nova-tiptap-btn" :class="btnClass(editor.isActive('image', { dataFloat: 'center' }) || editor.isActive('snippetBlock', { dataFloat: 'center' }))" @click="editor.chain().focus().setFloatCenter().run()" title="Center">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><rect x="5" y="3" width="14" height="8" rx="1" /><path d="M3 14.5h18M6 17.5h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none" /></svg>
+            </button>
+            <button type="button" class="nova-tiptap-btn" :class="btnClass(editor.isActive('image', { dataFloat: 'right' }) || editor.isActive('snippetBlock', { dataFloat: 'right' }))" @click="editor.chain().focus().setFloatRight().run()" title="Float Right">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><rect x="13" y="4" width="8" height="7" rx="1" /><path d="M3 5.5h7M3 8.5h7M3 14.5h18M3 17.5h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none" /></svg>
+            </button>
+            <button type="button" class="nova-tiptap-btn" :class="btnClass(false)" @click="editor.chain().focus().setFloatNone().run()" title="No Float">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M3 5.5h18M3 8.5h18M3 11.5h18M3 14.5h18M3 17.5h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none" /></svg>
+            </button>
+          </template>
+
+          <span class="border-l border-gray-300 dark:border-gray-600 mx-0.5 h-5"></span>
 
           <!-- Undo / Redo -->
           <button type="button" class="nova-tiptap-btn" :class="btnClass(false)" @click="editor.chain().focus().undo().run()" title="Undo">
@@ -248,6 +265,7 @@ import { TableHeader } from '@tiptap/extension-table-header'
 import Dropcursor from '@tiptap/extension-dropcursor'
 import ImageResize from 'tiptap-extension-resize-image'
 import SnippetBlock, { prepareSnippetHtml } from '../extensions/htmlBlock'
+import FloatControl from '../extensions/floatControl'
 import { FormField, HandlesValidationErrors } from 'laravel-nova'
 import { resolveButtons } from '../toolbarPresets'
 
@@ -345,6 +363,7 @@ export default {
           TableHeader,
         ] : []),
         SnippetBlock,
+        FloatControl,
       ],
       editable: !props.field.readonly,
       onCreate: ({ editor }) => {

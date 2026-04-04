@@ -164,6 +164,32 @@ sub, sup {
   font-size: 0.75em;
 }
 
+/* ─── Float Controls ──────────────────────────────────────────────────── */
+
+[data-float="left"] {
+  float: left;
+  margin: 0 1em 0.5em 0;
+}
+
+[data-float="right"] {
+  float: right;
+  margin: 0 0 0.5em 1em;
+}
+
+[data-float="center"] {
+  float: none;
+  display: block;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Clear floats */
+body::after {
+  content: '';
+  display: table;
+  clear: both;
+}
+
 /* ─── Snippet: Callout Box ────────────────────────────────────────────── */
 
 .wysiwyg-callout {
