@@ -5,7 +5,7 @@ return [
     |--------------------------------------------------------------------------
     | Upload Disk
     |--------------------------------------------------------------------------
-    | The Laravel filesystem disk to use for image uploads (Phase 2).
+    | The Laravel filesystem disk to use for image uploads.
     */
     'upload_disk' => 'public',
 
@@ -13,7 +13,7 @@ return [
     |--------------------------------------------------------------------------
     | Upload Path
     |--------------------------------------------------------------------------
-    | The path within the disk where uploaded images are stored (Phase 2).
+    | The path within the disk where uploaded images are stored.
     */
     'upload_path' => 'wysiwyg',
 
@@ -77,7 +77,7 @@ return [
     |--------------------------------------------------------------------------
     | Detail CSS
     |--------------------------------------------------------------------------
-    | URL to a CSS file injected into the detail iframe (Phase 3).
+    | URL to a CSS file injected into the detail iframe.
     | Set to null to use no custom stylesheet.
     */
     'detail_css' => 'default',

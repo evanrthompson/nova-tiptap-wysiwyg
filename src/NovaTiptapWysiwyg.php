@@ -22,7 +22,7 @@ class NovaTiptapWysiwyg extends Field
 
         $this->withMeta([
             'placeholder' => null,
-            'uploadUrl' => url('nova-vendor/nova-tiptap-wysiwyg/upload'),
+            'uploadUrl' => route('nova-tiptap-wysiwyg.upload'),
             'maxUploadSize' => config('nova-tiptap-wysiwyg.max_upload_size', 10240),
             'preset' => config('nova-tiptap-wysiwyg.preset', 'standard'),
             'withButtons' => [],
@@ -112,7 +112,7 @@ class NovaTiptapWysiwyg extends Field
         $value = config('nova-tiptap-wysiwyg.detail_css', 'default');
 
         if ($value === 'default') {
-            return url('nova-vendor/nova-tiptap-wysiwyg/css/wysiwyg.css');
+            return route('nova-tiptap-wysiwyg.css');
         }
 
         return $value;

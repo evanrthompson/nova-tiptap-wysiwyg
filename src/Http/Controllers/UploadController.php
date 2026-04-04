@@ -20,7 +20,7 @@ class UploadController
         $maxKb = (int) config('nova-tiptap-wysiwyg.max_upload_size', 10240);
 
         $request->validate([
-            'file' => ['required', 'file', 'image', 'mimes:jpg,jpeg,png,gif,webp,svg', 'max:'.$maxKb],
+            'file' => ['required', 'file', 'image', 'mimes:jpg,jpeg,png,gif,webp', 'max:'.$maxKb],
         ]);
 
         $disk = config('nova-tiptap-wysiwyg.upload_disk', 'public');
@@ -31,11 +31,10 @@ class UploadController
 
         $maxWidth = config('nova-tiptap-wysiwyg.max_image_width', 1280);
         $maxHeight = config('nova-tiptap-wysiwyg.max_image_height', 1280);
-        $isRaster = $ext !== 'svg';
 
-        if ($isRaster && class_exists(ImageManager::class)) {
-            $storedPath = $this->processWithIntervention($file, $path, $filename, $ext, $maxWidth, $maxHeight);
-        } elseif ($isRaster && function_exists('exif_read_data') && in_array($ext, ['jpg', 'jpeg'])) {
+        if (class_exists(ImageManager::class)) {
+            $storedPath = $this->processWithIntervention($file, $disk, $path, $filename, $ext, $maxWidth, $maxHeight);
+        } elseif (function_exists('exif_read_data') && in_array($ext, ['jpg', 'jpeg'])) {
             $processed = $this->orientWithGd($file->getRealPath(), $maxWidth, $maxHeight);
             $storedPath = $path.'/'.$filename;
             Storage::disk($disk)->put($storedPath, $processed);
@@ -51,13 +50,13 @@ class UploadController
      */
     private function processWithIntervention(
         UploadedFile $file,
+        string $disk,
         string $path,
         string $filename,
         string $ext,
         ?int $maxWidth,
         ?int $maxHeight,
     ): string {
-        $disk = config('nova-tiptap-wysiwyg.upload_disk', 'public');
 
         $driver = extension_loaded('imagick')
             ? new Driver

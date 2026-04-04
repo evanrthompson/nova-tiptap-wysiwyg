@@ -326,7 +326,7 @@ export default {
         // Use ImageResize (extends Image) instead of plain Image for drag-to-resize handles
         ImageResize,
         FileHandler.configure({
-          allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp', 'image/svg+xml'],
+          allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
           onPaste: (editor, files) => {
             files.forEach((file) => uploadImage(editor, file))
           },

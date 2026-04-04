@@ -1,9 +1,13 @@
 {
     "name": "evanrthompson/nova-tiptap-wysiwyg",
-    "description": "A Laravel Nova field.",
+    "description": "A rich text editor field for Laravel Nova 5, built on Tiptap v3 with image uploads, snippets, and configurable toolbars.",
     "keywords": [
         "laravel",
-        "nova"
+        "nova",
+        "tiptap",
+        "wysiwyg",
+        "rich-text",
+        "editor"
     ],
     "license": "MIT",
     "require": {
