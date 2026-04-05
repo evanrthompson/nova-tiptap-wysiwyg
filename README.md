@@ -218,6 +218,122 @@ NovaTiptapWysiwyg::make('Content', 'body')
     ->withoutButtons(['strike'])            // Remove buttons from preset
     ->snippets([...])                       // Custom snippet definitions
     ->detailCss('/css/content.css')         // Custom detail view stylesheet
+    ->withExtensions(['youtube'])           // Declare expected custom extensions
+```
+
+## Extending the Editor
+
+You can register custom Tiptap extensions and toolbar buttons from your host application. This lets you add any Tiptap extension (YouTube embeds, mentions, math blocks, etc.) without forking the package.
+
+### Step 1: Create your extension script
+
+Create a JS file in your host app that registers extensions via `window.NovaTiptapWysiwyg`:
+
+```js
+// resources/js/nova/tiptap-extensions.js
+import Youtube from '@tiptap/extension-youtube'
+
+// Load-order safe stub — ensures calls work even if this script loads before the field bundle
+window.NovaTiptapWysiwyg ??= { _queue: [], registerExtension(...a) { this._queue.push(['registerExtension', a]) }, registerButton(...a) { this._queue.push(['registerButton', a]) }, registerExtensionWithButton(...a) { this._queue.push(['registerExtensionWithButton', a]) } }
+
+// Register an extension with a toolbar button
+window.NovaTiptapWysiwyg.registerExtensionWithButton(
+  Youtube.configure({ width: 640, height: 480 }),
+  {
+    name: 'youtube',
+    title: 'Insert YouTube Video',
+    icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 14.5v-9l6 4.5-6 4.5z"/></svg>',
+    action: (editor) => {
+      const url = prompt('Enter YouTube URL:')
+      if (url) editor.commands.setYoutubeVideo({ src: url })
+    },
+    isActive: (editor) => editor.isActive('youtube'),
+  }
+)
+```
+
+Compile this file with your host app's build tool (Vite, Mix, etc.).
+
+### Step 2: Load the script via Nova
+
+In a service provider, register your compiled script:
+
+```php
+use Laravel\Nova\Nova;
+
+public function boot()
+{
+    Nova::script('my-tiptap-extensions', resource_path('js/nova/tiptap-extensions.js'));
+}
+```
+
+### Step 3: Declare extensions on the field (optional)
+
+You can optionally declare which custom extensions a field expects. This enables console warnings if an extension was declared but not registered:
+
+```php
+NovaTiptapWysiwyg::make('Body')
+    ->withExtensions(['youtube'])
+    ->preset('standard'),
+```
+
+### Registration API
+
+All methods are available on `window.NovaTiptapWysiwyg`:
+
+| Method | Description |
+|--------|-------------|
+| `registerExtension(extension, options?)` | Register a Tiptap extension |
+| `registerButton(buttonDef, options?)` | Register a custom toolbar button |
+| `registerExtensionWithButton(extension, buttonDef, options?)` | Register both together |
+
+**Options:** Pass `{ fields: ['body', 'content'] }` to target specific field attributes. Omit to apply globally.
+
+**Button definition:**
+
+```js
+{
+  name: 'myButton',              // Unique key (required)
+  icon: '<svg>...</svg>',        // Inline SVG string (required unless using component)
+  title: 'My Button',            // Tooltip text (required)
+  action: (editor) => { ... },   // Click handler (required unless using component)
+  isActive: (editor) => bool,    // Active state check (optional)
+  component: MyVueComponent,     // Vue component for complex UI like dropdowns (optional)
+}
+```
+
+When using `component`, your Vue component receives `editor` and `btnClass` as props.
+
+### Load Order
+
+Nova may load your script before the field's bundle. The one-line stub at the top of the Step 1 example handles this automatically — it creates a lightweight proxy that queues your registrations and replays them when the real registry initializes. Always include it.
+
+### Simple Button Example (No Build Step)
+
+For scripts that don't need `import` (plain JS loaded via `Nova::script()`), you can register toolbar-only buttons without any build tool:
+
+```js
+// resources/js/nova/custom-tiptap-buttons.js (plain JS, no compilation needed)
+window.NovaTiptapWysiwyg ??= { _queue: [], registerExtension(...a) { this._queue.push(['registerExtension', a]) }, registerButton(...a) { this._queue.push(['registerButton', a]) }, registerExtensionWithButton(...a) { this._queue.push(['registerExtensionWithButton', a]) } }
+
+window.NovaTiptapWysiwyg.registerButton({
+  name: 'clearFormatting',
+  title: 'Clear Formatting',
+  icon: '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M3.27 5L2 6.27l6.97 6.97L6.5 19h3l1.57-3.66L16.73 21 18 19.73 3.27 5zM6 5v.18L8.82 8h2.4l-.72 1.68 2.1 2.1L14.21 8H20V5H6z"/></svg>',
+  action: (editor) => editor.chain().focus().clearNodes().unsetAllMarks().run(),
+})
+```
+
+### Per-Field Targeting
+
+Register extensions or buttons for specific fields only:
+
+```js
+// Only add to the 'body' and 'content' fields
+window.NovaTiptapWysiwyg.registerButton(
+  { name: 'hr', title: 'Divider', icon: '—', action: (e) => e.chain().focus().setHorizontalRule().run() },
+  { fields: ['body', 'content'] }
+)
 ```
 
 ## Security

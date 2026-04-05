@@ -195,6 +195,28 @@
             </button>
           </template>
 
+          <!-- Custom extension buttons -->
+          <template v-if="customButtons.length">
+            <span class="border-l border-gray-300 dark:border-gray-600 mx-0.5 h-5"></span>
+            <template v-for="btn in customButtons" :key="btn.name">
+              <component
+                v-if="btn.component"
+                :is="btn.component"
+                :editor="editor"
+                :btn-class="btnClass"
+              />
+              <button
+                v-else
+                type="button"
+                class="nova-tiptap-btn"
+                :class="btnClass(btn.isActive ? btn.isActive(editor) : false)"
+                @click="btn.action(editor)"
+                :title="btn.title"
+                v-html="btn.icon"
+              />
+            </template>
+          </template>
+
           <span class="border-l border-gray-300 dark:border-gray-600 mx-0.5 h-5"></span>
 
           <!-- Undo / Redo -->
@@ -268,6 +290,7 @@ import SnippetBlock, { prepareSnippetHtml } from '../extensions/htmlBlock'
 import FloatControl from '../extensions/floatControl'
 import { FormField, HandlesValidationErrors } from 'laravel-nova'
 import { resolveButtons } from '../toolbarPresets'
+import { registry } from '../extensionRegistry'
 
 export default {
   components: { EditorContent },
@@ -280,6 +303,22 @@ export default {
       props.field.withButtons ?? [],
       props.field.withoutButtons ?? [],
     )
+
+    // Query the extension registry for custom extensions and buttons
+    const fieldAttribute = props.field.attribute
+    const customExtensions = registry.getExtensions(fieldAttribute)
+    const customButtons = registry.getButtons(fieldAttribute)
+
+    // Warn about declared but unregistered extensions
+    const declared = props.field.customExtensions ?? []
+    if (declared.length) {
+      const registeredNames = customExtensions.map((ext) => ext.name).filter(Boolean)
+      declared.forEach((name) => {
+        if (!registeredNames.includes(name)) {
+          console.warn(`[NovaTiptapWysiwyg] Extension "${name}" was declared via withExtensions() but not registered. Register it using window.NovaTiptapWysiwyg.registerExtension().`)
+        }
+      })
+    }
 
     const uploadImage = async (editorInstance, file) => {
       const formData = new FormData()
@@ -364,6 +403,7 @@ export default {
         ] : []),
         SnippetBlock,
         FloatControl,
+        ...customExtensions,
       ],
       editable: !props.field.readonly,
       onCreate: ({ editor }) => {
@@ -373,7 +413,7 @@ export default {
       },
     })
 
-    return { editor, uploadImage }
+    return { editor, uploadImage, customButtons }
   },
 
   data() {

@@ -95,6 +95,17 @@ class NovaTiptapWysiwyg extends Field
     }
 
     /**
+     * Declare custom extension names this field instance expects.
+     * The actual extensions must be registered via Nova::script() on the JS side.
+     *
+     * @param  string[]  $extensionNames
+     */
+    public function withExtensions(array $extensionNames): static
+    {
+        return $this->withMeta(['customExtensions' => $extensionNames]);
+    }
+
+    /**
      * Set the CSS path injected into the detail view iframe.
      */
     public function detailCss(?string $url): static
