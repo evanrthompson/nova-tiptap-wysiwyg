@@ -6,7 +6,7 @@ use Illuminate\Support\Facades\Route;
 Route::post('/upload', UploadController::class)->name('nova-tiptap-wysiwyg.upload');
 
 Route::get('/css/wysiwyg.css', function () {
-    $path = __DIR__.'/../dist/css/wysiwyg.css';
+    $path = __DIR__.'/../resources/css/wysiwyg.css';
 
     return response()->file($path, [
         'Content-Type' => 'text/css',
