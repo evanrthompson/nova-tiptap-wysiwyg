@@ -14,6 +14,22 @@
   outline: none;
 }
 
+/* Toolbar padding — set here (not via Tailwind classes on the template)
+   because Nova's prebuilt Tailwind may not ship every utility size. */
+.nova-tiptap-toolbar {
+  padding: 0.25rem;
+}
+
+/* Editor background — low specificity so any user-provided
+   .tiptap { background: ... } or higher-specificity override wins. */
+.nova-tiptap-content {
+  background-color: #ffffff;
+}
+
+.dark .nova-tiptap-content {
+  background-color: #111827;
+}
+
 /* ─── Editor Content Styles ───────────────────────────────────────────── */
 /* Mirror wysiwyg.css styles so the editor matches the detail/frontend view */
 

@@ -11,12 +11,13 @@ export const BUTTON_ORDER = [
   'link', 'image',
   'snippets',
   'float',
+  'source',
 ]
 
 // Preset definitions
 export const PRESETS = {
   basic: ['bold', 'italic', 'link'],
-  standard: ['bold', 'italic', 'underline', 'strike', 'heading', 'bulletList', 'orderedList', 'blockquote', 'link', 'image', 'float'],
+  standard: ['bold', 'italic', 'underline', 'strike', 'heading', 'bulletList', 'orderedList', 'blockquote', 'link', 'image', 'float', 'source'],
   full: [...BUTTON_ORDER],
 }
 

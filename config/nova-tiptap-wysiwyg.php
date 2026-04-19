@@ -75,6 +75,16 @@ return [
 
     /*
     |--------------------------------------------------------------------------
+    | Heading Levels
+    |--------------------------------------------------------------------------
+    | Which heading levels appear as toolbar buttons when the 'heading' button
+    | is enabled. Any subset of [1, 2, 3, 4, 5, 6]. Heading content at all six
+    | levels continues to render regardless of what shows in the toolbar.
+    */
+    'heading_levels' => [1, 2, 3],
+
+    /*
+    |--------------------------------------------------------------------------
     | Detail CSS
     |--------------------------------------------------------------------------
     | URL to a CSS file injected into the detail iframe.

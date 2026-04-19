@@ -10,11 +10,11 @@
         <!-- Toolbar -->
         <div
           v-if="editor && !field.readonly"
-          class="nova-tiptap-toolbar flex flex-wrap items-center gap-1 mb-0 p-1.5 border border-gray-200 dark:border-gray-700 rounded-t bg-gray-50 dark:bg-gray-800"
+          class="nova-tiptap-toolbar flex flex-wrap items-center gap-1 mb-0 border border-gray-200 dark:border-gray-700 rounded-t bg-gray-50 dark:bg-gray-800"
         >
           <!-- Text formatting -->
           <button v-if="buttons.includes('bold')" type="button" class="nova-tiptap-btn" :class="btnClass(editor.isActive('bold'))" @click="editor.chain().focus().toggleBold().run()" title="Bold">
-            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M7.5 3.75A.75.75 0 0 1 8.25 3h5.25a3.75 3.75 0 0 1 2.7 6.375A3.75 3.75 0 0 1 14.25 15H8.25a.75.75 0 0 1-.75-.75v-10.5ZM9 4.5v3.75h4.5a2.25 2.25 0 0 0 0-4.5H9ZM9 9.75v3.75h5.25a2.25 2.25 0 0 0 0-4.5H9Z" clip-rule="evenodd" /></svg>
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M15.6 10.79c.97-.67 1.65-1.77 1.65-2.79 0-2.26-1.75-4-4-4H7v14h7.04c2.09 0 3.71-1.7 3.71-3.79 0-1.52-.86-2.82-2.15-3.42zM10 6.5h3c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5h-3v-3zm3.5 9H10v-3h3.5c.83 0 1.5.67 1.5 1.5s-.67 1.5-1.5 1.5z" /></svg>
           </button>
           <button v-if="buttons.includes('italic')" type="button" class="nova-tiptap-btn" :class="btnClass(editor.isActive('italic'))" @click="editor.chain().focus().toggleItalic().run()" title="Italic">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M10.497 3.744a.75.75 0 0 1 .75-.744h6a.75.75 0 0 1 0 1.5h-2.173l-3.5 15h2.173a.75.75 0 0 1 0 1.5h-6a.75.75 0 0 1 0-1.5h2.173l3.5-15h-2.173a.75.75 0 0 1-.75-.756Z" clip-rule="evenodd" /></svg>
@@ -41,7 +41,7 @@
 
           <!-- Headings -->
           <template v-if="buttons.includes('heading')">
-            <button v-for="level in [1, 2, 3, 4, 5, 6]" :key="'h' + level" type="button" class="nova-tiptap-btn px-1.5 text-xs font-bold" :class="btnClass(editor.isActive('heading', { level }))" @click="editor.chain().focus().toggleHeading({ level }).run()" :title="'Heading ' + level">H{{ level }}</button>
+            <button v-for="level in headingLevels" :key="'h' + level" type="button" class="nova-tiptap-btn px-1.5 text-xs font-bold" :class="btnClass(editor.isActive('heading', { level }))" @click="editor.chain().focus().toggleHeading({ level }).run()" :title="'Heading ' + level">H{{ level }}</button>
           </template>
 
           <span v-if="buttons.includes('heading') && ['bulletList','orderedList'].some(b => buttons.includes(b))" class="border-l border-gray-300 dark:border-gray-600 mx-0.5 h-5"></span>
@@ -178,19 +178,19 @@
             </div>
           </template>
 
-          <!-- Float controls -->
+          <!-- Image float controls -->
           <template v-if="buttons.includes('float')">
             <span class="border-l border-gray-300 dark:border-gray-600 mx-0.5 h-5"></span>
-            <button type="button" class="nova-tiptap-btn" :class="btnClass(editor.isActive('image', { dataFloat: 'left' }) || editor.isActive('snippetBlock', { dataFloat: 'left' }))" @click="editor.chain().focus().setFloatLeft().run()" title="Float Left">
+            <button type="button" class="nova-tiptap-btn" :class="btnClass(editor.isActive('imageResize', { dataFloat:'left' }))" @click="editor.chain().focus().setImageFloatLeft().run()" title="Float image left (text wraps right)">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><rect x="3" y="4" width="8" height="7" rx="1" /><path d="M14 5.5h7M14 8.5h7M3 14.5h18M3 17.5h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none" /></svg>
             </button>
-            <button type="button" class="nova-tiptap-btn" :class="btnClass(editor.isActive('image', { dataFloat: 'center' }) || editor.isActive('snippetBlock', { dataFloat: 'center' }))" @click="editor.chain().focus().setFloatCenter().run()" title="Center">
+            <button type="button" class="nova-tiptap-btn" :class="btnClass(editor.isActive('imageResize', { dataFloat:'center' }))" @click="editor.chain().focus().setImageFloatCenter().run()" title="Center image (no wrap)">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><rect x="5" y="3" width="14" height="8" rx="1" /><path d="M3 14.5h18M6 17.5h12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none" /></svg>
             </button>
-            <button type="button" class="nova-tiptap-btn" :class="btnClass(editor.isActive('image', { dataFloat: 'right' }) || editor.isActive('snippetBlock', { dataFloat: 'right' }))" @click="editor.chain().focus().setFloatRight().run()" title="Float Right">
+            <button type="button" class="nova-tiptap-btn" :class="btnClass(editor.isActive('imageResize', { dataFloat:'right' }))" @click="editor.chain().focus().setImageFloatRight().run()" title="Float image right (text wraps left)">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><rect x="13" y="4" width="8" height="7" rx="1" /><path d="M3 5.5h7M3 8.5h7M3 14.5h18M3 17.5h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none" /></svg>
             </button>
-            <button type="button" class="nova-tiptap-btn" :class="btnClass(false)" @click="editor.chain().focus().setFloatNone().run()" title="No Float">
+            <button type="button" class="nova-tiptap-btn" :class="btnClass(false)" @click="editor.chain().focus().setImageFloatNone().run()" title="Clear image float">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path d="M3 5.5h18M3 8.5h18M3 11.5h18M3 14.5h18M3 17.5h18" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" fill="none" /></svg>
             </button>
           </template>
@@ -217,13 +217,21 @@
             </template>
           </template>
 
+          <!-- Source view -->
+          <template v-if="buttons.includes('source')">
+            <span class="border-l border-gray-300 dark:border-gray-600 mx-0.5 h-5"></span>
+            <button type="button" class="nova-tiptap-btn" :class="btnClass(sourceMode)" @click="toggleSource" title="Show HTML source">
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M8.78 9.22a.75.75 0 0 1 0 1.06L6.06 13l2.72 2.72a.75.75 0 1 1-1.06 1.06l-3.25-3.25a.75.75 0 0 1 0-1.06l3.25-3.25a.75.75 0 0 1 1.06 0Zm6.44 0a.75.75 0 0 1 1.06 0l3.25 3.25a.75.75 0 0 1 0 1.06l-3.25 3.25a.75.75 0 1 1-1.06-1.06L17.94 13l-2.72-2.72a.75.75 0 0 1 0-1.06Zm-2.4-2.92a.75.75 0 0 1 .54.91l-3 11a.75.75 0 1 1-1.45-.39l3-11a.75.75 0 0 1 .91-.53Z" clip-rule="evenodd" /></svg>
+            </button>
+          </template>
+
           <span class="border-l border-gray-300 dark:border-gray-600 mx-0.5 h-5"></span>
 
           <!-- Undo / Redo -->
-          <button type="button" class="nova-tiptap-btn" :class="btnClass(false)" @click="editor.chain().focus().undo().run()" title="Undo">
+          <button type="button" class="nova-tiptap-btn" :class="btnClass(false)" :disabled="sourceMode" @click="editor.chain().focus().undo().run()" title="Undo">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M9.53 2.47a.75.75 0 0 1 0 1.06L4.81 8.25H15a6.75 6.75 0 0 1 0 13.5h-3a.75.75 0 0 1 0-1.5h3a5.25 5.25 0 1 0 0-10.5H4.81l4.72 4.72a.75.75 0 1 1-1.06 1.06l-6-6a.75.75 0 0 1 0-1.06l6-6a.75.75 0 0 1 1.06 0Z" clip-rule="evenodd" /></svg>
           </button>
-          <button type="button" class="nova-tiptap-btn" :class="btnClass(false)" @click="editor.chain().focus().redo().run()" title="Redo">
+          <button type="button" class="nova-tiptap-btn" :class="btnClass(false)" :disabled="sourceMode" @click="editor.chain().focus().redo().run()" title="Redo">
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M14.47 2.47a.75.75 0 0 1 1.06 0l6 6a.75.75 0 0 1 0 1.06l-6 6a.75.75 0 1 1-1.06-1.06l4.72-4.72H9a5.25 5.25 0 1 0 0 10.5h3a.75.75 0 0 1 0 1.5H9a6.75 6.75 0 0 1 0-13.5h10.19l-4.72-4.72a.75.75 0 0 1 0-1.06Z" clip-rule="evenodd" /></svg>
           </button>
         </div>
@@ -259,9 +267,20 @@
         <!-- Editor content area -->
         <EditorContent
           v-if="editor"
+          v-show="!sourceMode"
           :editor="editor"
           class="nova-tiptap-content border border-gray-200 dark:border-gray-700 p-3 min-h-[120px] max-w-none"
           :class="{ 'rounded-b': !field.readonly, 'rounded': field.readonly }"
+        />
+
+        <!-- HTML source view -->
+        <textarea
+          v-if="sourceMode"
+          v-model="sourceHtml"
+          class="nova-tiptap-source form-control form-input w-full border border-gray-200 dark:border-gray-700 p-3 font-mono text-sm"
+          :class="{ 'rounded-b': !field.readonly, 'rounded': field.readonly }"
+          :style="{ height: sourceHeight }"
+          spellcheck="false"
         />
       </div>
     </template>
@@ -285,9 +304,9 @@ import { TableRow } from '@tiptap/extension-table-row'
 import { TableCell } from '@tiptap/extension-table-cell'
 import { TableHeader } from '@tiptap/extension-table-header'
 import Dropcursor from '@tiptap/extension-dropcursor'
-import ImageResize from 'tiptap-extension-resize-image'
+import ImageResizeWithFloat from '../extensions/imageFloat'
 import SnippetBlock, { prepareSnippetHtml } from '../extensions/htmlBlock'
-import FloatControl from '../extensions/floatControl'
+import { html as beautifyHtml } from 'js-beautify'
 import { FormField, HandlesValidationErrors } from 'laravel-nova'
 import { resolveButtons } from '../toolbarPresets'
 import { registry } from '../extensionRegistry'
@@ -362,8 +381,8 @@ export default {
         Placeholder.configure({
           placeholder: props.field.placeholder ?? '',
         }),
-        // Use ImageResize (extends Image) instead of plain Image for drag-to-resize handles
-        ImageResize,
+        // Use ImageResizeWithFloat (extends ImageResize, extends Image) — adds drag-resize and float/wrap
+        ImageResizeWithFloat,
         FileHandler.configure({
           allowedMimeTypes: ['image/jpeg', 'image/png', 'image/gif', 'image/webp'],
           onPaste: (editor, files) => {
@@ -402,7 +421,6 @@ export default {
           TableHeader,
         ] : []),
         SnippetBlock,
-        FloatControl,
         ...customExtensions,
       ],
       editable: !props.field.readonly,
@@ -418,6 +436,9 @@ export default {
 
   data() {
     return {
+      sourceMode: false,
+      sourceHtml: '',
+      sourceHeight: '120px',
       showLinkPopup: false,
       linkUrl: '',
       linkNewTab: true,
@@ -448,6 +469,10 @@ export default {
     snippets() {
       return this.field.snippets ?? []
     },
+    headingLevels() {
+      const levels = this.field.headingLevels ?? [1, 2, 3]
+      return levels.filter((l) => [1, 2, 3, 4, 5, 6].includes(l))
+    },
   },
 
   mounted() {
@@ -462,7 +487,7 @@ export default {
     btnClass(isActive) {
       return isActive
         ? 'bg-primary-500 text-white p-2 rounded'
-        : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-100 dark:hover:bg-gray-600 p-2 rounded'
+        : 'bg-white dark:bg-gray-700 text-gray-700 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-600 p-2 rounded'
     },
 
     closePopups(event) {
@@ -530,12 +555,38 @@ export default {
      * Fill the given FormData object with the field's internal value.
      */
     fill(formData) {
-      if (this.editor && !this.editor.isEmpty) {
+      if (this.sourceMode) {
+        this.value = this.sourceHtml.trim()
+      } else if (this.editor && !this.editor.isEmpty) {
         this.value = this.editor.getHTML()
       } else {
         this.value = ''
       }
       formData.append(this.fieldAttribute, this.value)
+    },
+
+    toggleSource() {
+      if (!this.sourceMode) {
+        const editorEl = this.$el.querySelector('.nova-tiptap-content')
+        const measured = editorEl?.offsetHeight ?? 0
+        this.sourceHeight = `${Math.max(measured, 120)}px`
+        const raw = this.editor?.isEmpty ? '' : (this.editor?.getHTML() ?? '')
+        this.sourceHtml = raw
+          ? beautifyHtml(raw, {
+              indent_size: 2,
+              wrap_line_length: 120,
+              preserve_newlines: true,
+              max_preserve_newlines: 1,
+              end_with_newline: false,
+              unformatted: ['code', 'pre'],
+              inline: ['b', 'i', 'u', 'em', 'strong', 'span', 'a', 'mark', 'sub', 'sup', 'code'],
+            })
+          : ''
+        this.sourceMode = true
+      } else {
+        this.editor?.commands.setContent(this.sourceHtml || '', false)
+        this.sourceMode = false
+      }
     },
 
     /**

@@ -27,6 +27,7 @@ class NovaTiptapWysiwyg extends Field
             'preset' => config('nova-tiptap-wysiwyg.preset', 'standard'),
             'withButtons' => [],
             'withoutButtons' => [],
+            'headingLevels' => config('nova-tiptap-wysiwyg.heading_levels', [1, 2, 3]),
             'detailCss' => $this->resolveDetailCss(),
             'snippets' => config('nova-tiptap-wysiwyg.snippets', []),
         ]);
@@ -79,6 +80,18 @@ class NovaTiptapWysiwyg extends Field
     public function withoutButtons(array $buttons): static
     {
         return $this->withMeta(['withoutButtons' => $buttons]);
+    }
+
+    /**
+     * Set which heading levels appear as toolbar buttons.
+     * Accepts any subset of [1, 2, 3, 4, 5, 6]. Defaults to [1, 2, 3].
+     * Heading content at all six levels continues to render regardless.
+     *
+     * @param  int[]  $levels
+     */
+    public function headingLevels(array $levels): static
+    {
+        return $this->withMeta(['headingLevels' => array_values(array_intersect([1, 2, 3, 4, 5, 6], $levels))]);
     }
 
     /**
