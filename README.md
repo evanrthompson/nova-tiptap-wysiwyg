@@ -124,6 +124,25 @@ NovaTiptapWysiwyg::make('Body')->snippets([
 
 Set the `snippets` array in `config/nova-tiptap-wysiwyg.php` to define defaults for all field instances. Per-field `->snippets()` calls replace the global defaults entirely.
 
+### Wrapping selected text with `{{content}}`:
+
+Any snippet whose `html` contains the literal token `{{content}}` folds the user's current selection into the snippet on insert. If the user inserts the snippet with nothing selected, `{{content}}` is replaced with the string `Snippet Content` so there's always something to edit.
+
+```php
+NovaTiptapWysiwyg::make('Body')->snippets([
+    [
+        'label' => 'Blockquote',
+        'html'  => '<blockquote><p>{{content}}</p></blockquote>',
+    ],
+    [
+        'label' => 'Warning',
+        'html'  => '<div class="wysiwyg-callout"><p><strong>Warning:</strong> {{content}}</p></div>',
+    ],
+]),
+```
+
+Typical workflow: the editor highlights a paragraph, opens the Snippets dropdown, picks "Blockquote", and the selected paragraph is wrapped inside the blockquote in place.
+
 ## Image Uploads
 
 Image uploads are handled automatically via a built-in API endpoint. Uploaded images are:

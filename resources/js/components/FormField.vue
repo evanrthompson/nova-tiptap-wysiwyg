@@ -166,12 +166,12 @@
               <button type="button" class="nova-tiptap-btn" :class="btnClass(false)" @click="showSnippetMenu = !showSnippetMenu" title="Insert Snippet">
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-4 h-4"><path fill-rule="evenodd" d="M3 6a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6Zm4.5 1.5a.75.75 0 0 0 0 1.5h9a.75.75 0 0 0 0-1.5h-9Zm0 3.75a.75.75 0 0 0 0 1.5h9a.75.75 0 0 0 0-1.5h-9Zm0 3.75a.75.75 0 0 0 0 1.5h5.25a.75.75 0 0 0 0-1.5H7.5Z" clip-rule="evenodd" /></svg>
               </button>
-              <div v-if="showSnippetMenu" class="absolute top-full left-0 mt-1 p-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-lg z-50 min-w-[180px] max-h-[240px] overflow-y-auto">
+              <div v-if="showSnippetMenu" class="nova-tiptap-snippet-menu absolute top-full left-0 mt-1 p-1 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 rounded shadow-lg z-50 overflow-y-auto">
                 <button
                   v-for="(snippet, i) in snippets"
                   :key="i"
                   type="button"
-                  class="w-full text-left px-2 py-1.5 text-sm hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
+                  class="nova-tiptap-snippet-item w-full text-left px-2 py-1.5 text-sm text-gray-800 dark:text-gray-100 hover:bg-gray-100 dark:hover:bg-gray-700 rounded"
                   @click="insertSnippet(snippet.html)"
                 >{{ snippet.label }}</button>
               </div>
@@ -307,7 +307,8 @@ import { TableCell } from '@tiptap/extension-table-cell'
 import { TableHeader } from '@tiptap/extension-table-header'
 import Dropcursor from '@tiptap/extension-dropcursor'
 import ImageResizeWithFloat from '../extensions/imageFloat'
-import SnippetBlock, { prepareSnippetHtml } from '../extensions/htmlBlock'
+import SnippetBlock, { renderSnippet } from '../extensions/htmlBlock'
+import { DOMSerializer } from '@tiptap/pm/model'
 import { html as beautifyHtml } from 'js-beautify'
 import { FormField, HandlesValidationErrors } from 'laravel-nova'
 import { resolveButtons } from '../toolbarPresets'
@@ -502,8 +503,28 @@ export default {
     },
 
     insertSnippet(html) {
-      this.editor.chain().focus().insertContent(prepareSnippetHtml(html)).run()
+      const selectedHtml = this.getSelectedHtml()
+      const rendered = renderSnippet(html, selectedHtml)
+      // insertContent replaces the current selection, so selected text is
+      // consumed (its content is already baked into `rendered` via the
+      // {{content}} substitution above).
+      this.editor.chain().focus().insertContent(rendered).run()
       this.showSnippetMenu = false
+    },
+
+    getSelectedHtml() {
+      if (!this.editor) {
+        return ''
+      }
+      const { from, to } = this.editor.state.selection
+      if (from === to) {
+        return ''
+      }
+      const slice = this.editor.state.doc.slice(from, to)
+      const fragment = DOMSerializer.fromSchema(this.editor.schema).serializeFragment(slice.content)
+      const container = document.createElement('div')
+      container.appendChild(fragment)
+      return container.innerHTML
     },
 
     applyHighlight(color) {

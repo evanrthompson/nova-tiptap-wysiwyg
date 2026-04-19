@@ -46,21 +46,26 @@ return [
     | (inserted at the cursor). These are the global defaults — individual
     | field instances can override or extend via ->snippets().
     |
+    | Use the `{{content}}` placeholder inside a snippet's html to fold the
+    | user's selected text into the snippet on insert. If the user inserts
+    | the snippet with nothing selected, `{{content}}` is replaced with the
+    | literal string "Snippet Content" (editable after insertion).
+    |
     | Example:
-    |   ['label' => 'Callout', 'html' => '<div class="callout p-4">Callout text</div>'],
+    |   ['label' => 'Callout', 'html' => '<div class="callout p-4">{{content}}</div>'],
     */
     'snippets' => [
         [
             'label' => 'Callout Box',
-            'html' => '<div class="wysiwyg-callout"><p><strong>Note:</strong> Your callout text here.</p></div>',
+            'html' => '<div class="wysiwyg-callout"><p><strong>Note:</strong> {{content}}</p></div>',
         ],
         [
             'label' => 'Info Card',
-            'html' => '<div class="wysiwyg-info-card"><h3>Info Title</h3><p>Descriptive text goes here. Replace this with your content.</p></div>',
+            'html' => '<div class="wysiwyg-info-card"><h3>Info Title</h3><p>{{content}}</p></div>',
         ],
         [
             'label' => 'Two Column Layout',
-            'html' => '<table><tr><td><h4>Left Column</h4><p>Left column content here.</p></td><td><h4>Right Column</h4><p>Right column content here.</p></td></tr></table>',
+            'html' => '<table><tr><td><h4>Left Column</h4><p>{{content}}</p></td><td><h4>Right Column</h4><p>Right column content here.</p></td></tr></table>',
         ],
     ],
 

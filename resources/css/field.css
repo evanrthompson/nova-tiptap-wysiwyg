@@ -20,6 +20,20 @@
   padding: 0.25rem;
 }
 
+/* Snippet dropdown sizing — set in CSS so we don't depend on Nova
+   shipping arbitrary-value Tailwind utilities. */
+.nova-tiptap-snippet-menu {
+  min-width: 220px;
+  max-width: 360px;
+  max-height: 240px;
+}
+
+.nova-tiptap-snippet-item {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
 /* Editor background — low specificity so any user-provided
    .tiptap { background: ... } or higher-specificity override wins. */
 .nova-tiptap-content {

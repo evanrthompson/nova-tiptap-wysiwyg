@@ -47,4 +47,31 @@ export function prepareSnippetHtml(html) {
   return html.replace(/^<div(\s|>)/, '<div data-snippet $1')
 }
 
+/**
+ * Placeholder token swapped out at snippet-insertion time.
+ */
+export const CONTENT_PLACEHOLDER = '{{content}}'
+
+/**
+ * Placeholder used when the user inserts a snippet without a selection.
+ * Appears as editable text so they can overwrite it.
+ */
+export const EMPTY_CONTENT_FALLBACK = 'Snippet Content'
+
+/**
+ * Render a snippet template:
+ *
+ *   - Any `{{content}}` token is replaced with the user's selected HTML
+ *     (or the fallback string when the selection is empty).
+ *   - The outer div is tagged with `data-snippet` so the SnippetBlock
+ *     parser rule matches it.
+ */
+export function renderSnippet(templateHtml, selectedHtml = '') {
+  const replacement = selectedHtml && selectedHtml.trim() !== ''
+    ? selectedHtml
+    : EMPTY_CONTENT_FALLBACK
+  const withContent = templateHtml.split(CONTENT_PLACEHOLDER).join(replacement)
+  return prepareSnippetHtml(withContent)
+}
+
 export default SnippetBlock
