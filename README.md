@@ -185,6 +185,42 @@ Or set the default globally in the config:
 'detail_css' => null,                         // No stylesheet
 ```
 
+## Styling Hooks
+
+Both the edit view and the detail iframe expose ancestor classes so your
+overrides can be scoped as loosely or as tightly as you like:
+
+| Class                           | Where                                          |
+|---------------------------------|------------------------------------------------|
+| `.nova-tiptap-wysiwyg`          | Outer scope on both the edit wrapper and the detail iframe body |
+| `.nova-tiptap-wysiwyg-edit`     | Wraps the editor/source-view content area      |
+| `.nova-tiptap-wysiwyg-preview`  | Wraps the detail-view content area (available on the iframe *and* inside its body) |
+
+Because the detail iframe body itself carries `.nova-tiptap-wysiwyg` and the
+content is wrapped in `.nova-tiptap-wysiwyg-preview`, the same descendant
+selector works in any context:
+
+```css
+/* Restyle paragraphs in the detail view */
+.nova-tiptap-wysiwyg .nova-tiptap-wysiwyg-preview p {
+  font-family: "Iowan Old Style", Georgia, serif;
+  font-size: 1.125rem;
+  line-height: 1.7;
+}
+
+/* Restyle H2s only in the edit view */
+.nova-tiptap-wysiwyg .nova-tiptap-wysiwyg-edit .tiptap h2 {
+  color: #7c3aed;
+}
+
+/* Rules that should apply to both */
+.nova-tiptap-wysiwyg a { color: #2563eb; }
+```
+
+For rules that should appear inside the detail iframe, point `detail_css`
+(or `->detailCss(...)`) at a stylesheet that includes them — the same
+selectors work there.
+
 ## Placeholder Text
 
 ```php

@@ -1,73 +1,109 @@
 /*
  * NovaTiptapWysiwyg — Default Content Stylesheet
  *
- * This stylesheet is used in the detail view iframe and can be published
- * for use on the frontend to render WYSIWYG content consistently.
+ * Every rule in this file is scoped under `.nova-tiptap-wysiwyg` so the
+ * stylesheet can be safely loaded anywhere (Nova admin, detail iframe,
+ * frontend page) without leaking styles to surrounding UI.
  *
  * Publish: php artisan vendor:publish --tag=nova-tiptap-wysiwyg-assets
  * Then reference: /vendor/nova-tiptap-wysiwyg/css/wysiwyg.css
+ *
+ * ─── Scope hooks ──────────────────────────────────────────────────────
+ *
+ * The editor and detail view both expose two ancestor classes so your
+ * overrides can be as targeted as you like:
+ *
+ *   .nova-tiptap-wysiwyg           — outer scope (edit AND detail)
+ *   .nova-tiptap-wysiwyg-edit      — edit view content area only
+ *   .nova-tiptap-wysiwyg-preview   — detail view content area only
+ *
+ * The descendant selector `.nova-tiptap-wysiwyg .nova-tiptap-wysiwyg-preview`
+ * is available both outside the detail iframe (Nova-side) and inside the
+ * detail iframe body, so the same rule can be used in either context.
+ *
+ * When rendering WYSIWYG content on the frontend, wrap it in
+ *   <div class="nova-tiptap-wysiwyg nova-tiptap-wysiwyg-preview">…</div>
+ * so the rules below match.
+ *
+ * Example overrides (add to your own stylesheet, not this file):
+ *
+ *   .nova-tiptap-wysiwyg .nova-tiptap-wysiwyg-preview p {
+ *     font-family: "Iowan Old Style", Georgia, serif;
+ *     font-size: 1.125rem;
+ *   }
+ *
+ *   .nova-tiptap-wysiwyg .nova-tiptap-wysiwyg-edit .tiptap h2 {
+ *     color: #7c3aed;
+ *   }
  */
 
 /* ─── Base Typography ─────────────────────────────────────────────────── */
 
-body {
+.nova-tiptap-wysiwyg {
   font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen,
     Ubuntu, Cantarell, 'Helvetica Neue', Arial, sans-serif;
   line-height: 1.6;
   color: #1f2937;
 }
 
-h1, h2, h3, h4, h5, h6 {
+.nova-tiptap-wysiwyg h1,
+.nova-tiptap-wysiwyg h2,
+.nova-tiptap-wysiwyg h3,
+.nova-tiptap-wysiwyg h4,
+.nova-tiptap-wysiwyg h5,
+.nova-tiptap-wysiwyg h6 {
   line-height: 1.3;
   font-weight: 700;
   margin: 1em 0 0.5em;
   color: #111827;
 }
 
-h1 { font-size: 2em; }
-h2 { font-size: 1.5em; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.25em; }
-h3 { font-size: 1.25em; }
-h4 { font-size: 1.1em; }
-h5 { font-size: 1em; }
-h6 { font-size: 0.9em; color: #6b7280; }
+.nova-tiptap-wysiwyg h1 { font-size: 2em; }
+.nova-tiptap-wysiwyg h2 { font-size: 1.5em; border-bottom: 1px solid #e5e7eb; padding-bottom: 0.25em; }
+.nova-tiptap-wysiwyg h3 { font-size: 1.25em; }
+.nova-tiptap-wysiwyg h4 { font-size: 1.1em; }
+.nova-tiptap-wysiwyg h5 { font-size: 1em; }
+.nova-tiptap-wysiwyg h6 { font-size: 0.9em; color: #6b7280; }
 
-p {
+.nova-tiptap-wysiwyg p {
   margin: 0.75em 0;
 }
 
 /* ─── Links ───────────────────────────────────────────────────────────── */
 
-a {
+.nova-tiptap-wysiwyg a {
   color: #2563eb;
   text-decoration: underline;
   text-underline-offset: 2px;
 }
 
-a:hover {
+.nova-tiptap-wysiwyg a:hover {
   color: #1d4ed8;
 }
 
 /* ─── Lists ───────────────────────────────────────────────────────────── */
 
-ul, ol {
+.nova-tiptap-wysiwyg ul,
+.nova-tiptap-wysiwyg ol {
   margin: 0.75em 0;
   padding-left: 1.5em;
 }
 
-ul { list-style-type: disc; }
-ol { list-style-type: decimal; }
+.nova-tiptap-wysiwyg ul { list-style-type: disc; }
+.nova-tiptap-wysiwyg ol { list-style-type: decimal; }
 
-li {
+.nova-tiptap-wysiwyg li {
   margin: 0.25em 0;
 }
 
-li > ul, li > ol {
+.nova-tiptap-wysiwyg li > ul,
+.nova-tiptap-wysiwyg li > ol {
   margin: 0.25em 0;
 }
 
 /* ─── Blockquote ──────────────────────────────────────────────────────── */
 
-blockquote {
+.nova-tiptap-wysiwyg blockquote {
   border-left: 4px solid #6366f1;
   background: #eef2ff;
   margin: 1em 0;
@@ -76,13 +112,13 @@ blockquote {
   border-radius: 0 6px 6px 0;
 }
 
-blockquote p {
+.nova-tiptap-wysiwyg blockquote p {
   margin: 0.25em 0;
 }
 
 /* ─── Code ────────────────────────────────────────────────────────────── */
 
-code {
+.nova-tiptap-wysiwyg code {
   background: #f3f4f6;
   border: 1px solid #e5e7eb;
   border-radius: 3px;
@@ -92,7 +128,7 @@ code {
   color: #dc2626;
 }
 
-pre {
+.nova-tiptap-wysiwyg pre {
   background: #1f2937;
   color: #e5e7eb;
   border-radius: 6px;
@@ -101,7 +137,7 @@ pre {
   margin: 1em 0;
 }
 
-pre code {
+.nova-tiptap-wysiwyg pre code {
   background: none;
   border: none;
   padding: 0;
@@ -111,7 +147,7 @@ pre code {
 
 /* ─── Horizontal Rule ─────────────────────────────────────────────────── */
 
-hr {
+.nova-tiptap-wysiwyg hr {
   border: none;
   border-top: 2px solid #e5e7eb;
   margin: 1.5em 0;
@@ -119,7 +155,7 @@ hr {
 
 /* ─── Images ──────────────────────────────────────────────────────────── */
 
-img {
+.nova-tiptap-wysiwyg img {
   max-width: 100%;
   height: auto;
   border-radius: 6px;
@@ -127,32 +163,32 @@ img {
 
 /* ─── Tables ──────────────────────────────────────────────────────────── */
 
-table {
+.nova-tiptap-wysiwyg table {
   border-collapse: collapse;
   width: 100%;
   margin: 1em 0;
 }
 
-table td,
-table th {
+.nova-tiptap-wysiwyg table td,
+.nova-tiptap-wysiwyg table th {
   border: 1px solid #d1d5db;
   padding: 0.5em 0.75em;
   vertical-align: top;
 }
 
-table th {
+.nova-tiptap-wysiwyg table th {
   background: #f3f4f6;
   font-weight: 600;
   text-align: left;
 }
 
-table tr:nth-child(even) td {
+.nova-tiptap-wysiwyg table tr:nth-child(even) td {
   background: #f9fafb;
 }
 
 /* ─── Highlight ───────────────────────────────────────────────────────── */
 
-mark {
+.nova-tiptap-wysiwyg mark {
   background: #fef08a;
   border-radius: 2px;
   padding: 0.05em 0.15em;
@@ -160,23 +196,24 @@ mark {
 
 /* ─── Sub / Superscript ───────────────────────────────────────────────── */
 
-sub, sup {
+.nova-tiptap-wysiwyg sub,
+.nova-tiptap-wysiwyg sup {
   font-size: 0.75em;
 }
 
 /* ─── Float Controls ──────────────────────────────────────────────────── */
 
-[data-float="left"] {
+.nova-tiptap-wysiwyg [data-float="left"] {
   float: left;
   margin: 0 1em 0.5em 0;
 }
 
-[data-float="right"] {
+.nova-tiptap-wysiwyg [data-float="right"] {
   float: right;
   margin: 0 0 0.5em 1em;
 }
 
-[data-float="center"] {
+.nova-tiptap-wysiwyg [data-float="center"] {
   float: none;
   display: block;
   margin-left: auto;
@@ -184,7 +221,7 @@ sub, sup {
 }
 
 /* Clear floats */
-body::after {
+.nova-tiptap-wysiwyg::after {
   content: '';
   display: table;
   clear: both;
@@ -192,7 +229,7 @@ body::after {
 
 /* ─── Snippet: Callout Box ────────────────────────────────────────────── */
 
-.wysiwyg-callout {
+.nova-tiptap-wysiwyg .wysiwyg-callout {
   background: #fefce8;
   border-left: 4px solid #f59e0b;
   padding: 12px 16px;
@@ -202,13 +239,13 @@ body::after {
   box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1), 0 1px 2px rgba(0, 0, 0, 0.06);
 }
 
-.wysiwyg-callout strong:first-child {
+.nova-tiptap-wysiwyg .wysiwyg-callout strong:first-child {
   color: #92400e;
 }
 
 /* ─── Snippet: Info Card ──────────────────────────────────────────────── */
 
-.wysiwyg-info-card {
+.nova-tiptap-wysiwyg .wysiwyg-info-card {
   background: #eff6ff;
   border: 1px solid #bfdbfe;
   border-radius: 8px;
@@ -216,7 +253,7 @@ body::after {
   margin: 12px 0;
 }
 
-.wysiwyg-info-card h3 {
+.nova-tiptap-wysiwyg .wysiwyg-info-card h3 {
   margin: 0 0 6px 0;
   font-size: 1.1em;
   color: #1e40af;
@@ -224,34 +261,34 @@ body::after {
   padding: 0;
 }
 
-.wysiwyg-info-card p {
+.nova-tiptap-wysiwyg .wysiwyg-info-card p {
   margin: 0;
   color: #1e3a5f;
 }
 
 /* ─── Snippet: Two Column ─────────────────────────────────────────────── */
 
-.wysiwyg-two-col {
+.nova-tiptap-wysiwyg .wysiwyg-two-col {
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 16px;
   margin: 12px 0;
 }
 
-.wysiwyg-two-col > div {
+.nova-tiptap-wysiwyg .wysiwyg-two-col > div {
   background: #f9fafb;
   border: 1px solid #e5e7eb;
   border-radius: 6px;
   padding: 12px 16px;
 }
 
-.wysiwyg-two-col h4 {
+.nova-tiptap-wysiwyg .wysiwyg-two-col h4 {
   margin: 0 0 4px 0;
   font-size: 1em;
   color: #374151;
 }
 
-.wysiwyg-two-col p {
+.nova-tiptap-wysiwyg .wysiwyg-two-col p {
   margin: 0;
   color: #6b7280;
 }

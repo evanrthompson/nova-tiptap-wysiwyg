@@ -264,24 +264,26 @@
           >Cancel</button>
         </div>
 
-        <!-- Editor content area -->
-        <EditorContent
-          v-if="editor"
-          v-show="!sourceMode"
-          :editor="editor"
-          class="nova-tiptap-content border border-gray-200 dark:border-gray-700 p-3 min-h-[120px] max-w-none"
-          :class="{ 'rounded-b': !field.readonly, 'rounded': field.readonly }"
-        />
+        <div class="nova-tiptap-wysiwyg-edit">
+          <!-- Editor content area -->
+          <EditorContent
+            v-if="editor"
+            v-show="!sourceMode"
+            :editor="editor"
+            class="nova-tiptap-content border border-gray-200 dark:border-gray-700 p-3 min-h-[120px] max-w-none"
+            :class="{ 'rounded-b': !field.readonly, 'rounded': field.readonly }"
+          />
 
-        <!-- HTML source view -->
-        <textarea
-          v-if="sourceMode"
-          v-model="sourceHtml"
-          class="nova-tiptap-source form-control form-input w-full border border-gray-200 dark:border-gray-700 p-3 font-mono text-sm"
-          :class="{ 'rounded-b': !field.readonly, 'rounded': field.readonly }"
-          :style="{ height: sourceHeight }"
-          spellcheck="false"
-        />
+          <!-- HTML source view -->
+          <textarea
+            v-if="sourceMode"
+            v-model="sourceHtml"
+            class="nova-tiptap-source form-control form-input w-full border border-gray-200 dark:border-gray-700 p-3 font-mono text-sm"
+            :class="{ 'rounded-b': !field.readonly, 'rounded': field.readonly }"
+            :style="{ height: sourceHeight }"
+            spellcheck="false"
+          />
+        </div>
       </div>
     </template>
   </DefaultField>

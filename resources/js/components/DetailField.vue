@@ -1,17 +1,19 @@
 <template>
   <PanelItem :index="index" :field="field">
     <template #value>
-      <iframe
-        v-if="field.value"
-        ref="iframeRef"
-        :srcdoc="iframeSrc"
-        sandbox="allow-same-origin"
-        scrolling="no"
-        class="nova-tiptap-iframe w-full border-0 rounded"
-        :style="{ height: iframeHeight + 'px', minHeight: '60px' }"
-        @load="onIframeLoad"
-      />
-      <span v-else class="text-gray-400">&mdash;</span>
+      <div class="nova-tiptap-wysiwyg">
+        <iframe
+          v-if="field.value"
+          ref="iframeRef"
+          :srcdoc="iframeSrc"
+          sandbox="allow-same-origin"
+          scrolling="no"
+          class="nova-tiptap-iframe nova-tiptap-wysiwyg-preview w-full border-0 rounded"
+          :style="{ height: iframeHeight + 'px', minHeight: '60px' }"
+          @load="onIframeLoad"
+        />
+        <span v-else class="text-gray-400">&mdash;</span>
+      </div>
     </template>
   </PanelItem>
 </template>
@@ -41,7 +43,7 @@ export default {
         ? `<style>body,p,li,td,th,span,div{color:#e5e7eb}h1,h2,h3,h4,h5{color:#f3f4f6}h6{color:#9ca3af}a{color:#60a5fa}blockquote{background:#1e1b4b;color:#a5b4fc;border-left-color:#818cf8}code{background:#374151;border-color:#4b5563;color:#f87171}hr{border-top-color:#4b5563}h2{border-bottom-color:#4b5563}</style>`
         : ''
       const content = this.field.value ?? ''
-      return `<!DOCTYPE html><html><head><meta charset="utf-8">${base}${baseStyle}${css}${darkOverride}</head><body>${content}</body></html>`
+      return `<!DOCTYPE html><html><head><meta charset="utf-8">${base}${baseStyle}${css}${darkOverride}</head><body class="nova-tiptap-wysiwyg"><div class="nova-tiptap-wysiwyg-preview">${content}</div></body></html>`
     },
   },
 
